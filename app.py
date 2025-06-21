@@ -5,6 +5,7 @@ import sqlite3
 import smtplib
 from email.mime.text import MIMEText
 import os
+from datetime import datetime, timezone, timedelta
 
 app = Flask(__name__)
 
@@ -29,8 +30,12 @@ def send_email_alert(data):
     sender = os.getenv('EMAIL_USER')
     receiver = os.getenv('TO_EMAIL')
     subject = 'Epilepsy Alert – Patient Health Update'
+    
+    # Small code to get time in UTC+1
+    utc_plus_one = timezone(timedelta(hours=1))
+    # current_time_utc_plus_one = datetime.now(utc_plus_one)
 
-    body = f"""📅 Time: {datetime.utcnow().isoformat()}
+    body = f"""📅 Time: {datetime.now(utc_plus_one).isoformat()}
 📍 Location: {data['location']}
 ⚠️ ALERT: Seizure Detected
 - G-Force: {data['g_force']}
